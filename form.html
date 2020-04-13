@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- <meta charset="utf-8"> -->
+		<meta name="author" content="lwei">
+		<meta name="keywords" content="html5,css3,响应式">
+		<!-- <meta http-equiv="content-type" content="text/html charset=utf-8"> -->
+		<!-- <meta http-equiv="refresh" content="3;http://li.cc"> -->
+		<title>表单元素</title>
+	</head>
+	<body>
+		<form method="get" id="register" name="reg" action="http://www.haosou.com" target="_blank" autocomplete="on">
+
+			<fieldset>
+				<legend>注册分组</legend>
+				<label for="user">用户名：</label>
+				<!-- <input name="user" autofocus disabled>	 -->
+				<input id="user" name="user" autocomplete="off"><br>
+
+				<label>
+					电子邮件：<input name="email" form="register">
+				</label>
+			</fieldset>
+
+
+			<button type="submit" formaction="http://www.sogou.com">提交</button>
+			<button type="reset">重置</button>
+			<button type="button">按钮</button>
+		</form>
+
+
+		<form action="http://www.li.cc" oninput="res.value = num1.valueAsNumber * num2.valueAsNumber">
+			<input type="text" name="user" maxlength="10" size="30" value="bnbbs" readonly disabled>
+			<input type="text" list="abc" required>
+			<input type="password" placeholder="请输入密码">
+			<input type="search">
+			<input type="number" min="10" max="100" step="2">
+
+			<fieldset>
+				<legend>日期输入</legend>
+				<input type="date">
+				<input type="month">
+				<input type="time">
+				<input type="week">
+				<input type="datetime">
+				<input type="datetime-local">
+			</fieldset>
+
+			<input type="color" name="color">
+
+			音乐<input type="checkbox" name="music" value="1">
+			体育<input type="checkbox" name="sport" value="2">
+
+			<input type="radio" name="sex" value="1" checked>男
+			<input type="radio" name="sex" value="2">女
+
+
+			<input type="submit">
+			<input type="reset">
+			<input type="button">
+
+			<input type="image" src="img/img.png">
+
+			<fieldset>
+				<legend>email、telephone number、url输入</legend>
+				<input type="email">
+				<input type="tel">
+				<input type="url">
+			</fieldset>
+
+			<input type="hidden" value="1" name="id">
+
+			<input type="file" accept="image/gif">
+
+			<select name="fruit" size="10" multiple>
+				<optgroup label="水果">
+					<option value="1">苹果</option>
+					<option value="2" selected>香蕉</option>
+					<option value="3">桔子</option>
+				</optgroup>
+				<optgroup label="粗粮">
+					<option value="4">小米</option>
+					<option value="5">大米</option>
+					<option value="6">玉米</option>
+				</optgroup>
+			</select>
+			
+			<textarea name="content" rows="20" cols="40" wrap="hard">请留下您的建议！</textarea>
+
+			<input type="number" id="num1"> x <input type="number" id="num2"> =
+			<output for="num1 num2" name="res">
+
+			<input type="text" placeholder="请输入区号+座机" pattern="^[\d]{2,4}\-[\d]{6,8}$">
+
+			<button>提交</button>
+		</form>
+
+		<datalist id="abc">
+			<option value="1">苹果</option>
+			<option value="2">桔子</option>
+			<option value="3" label="香蕉">
+			<option value="菠萝">
+		</datalist>
+		
+		<!-- <p id="abc">这是ID</p> -->
+		
+		<p class="abc">这是class</p>
+		<p class="abc">这是class</p>
+		<p class="abc">这是class</p>
+		
+		<!-- <input type="text" name="user" accesskey="n"> -->
+		
+		<!-- <p contenteditable="true">我可以修改吗</p> -->
+		
+		<!-- <p dir="rtl">文字方向</p> -->
+		
+		<p dir="rtl" hidden>文字方向</p>
+		
+		<p lang="en" title="这是HTML5教程" style="color:red;">HTML5</p>
+		
+		<input type="text" name="user1" tabindex="2">
+		<input type="text" name="user2" tabindex="1">
+	</body>
+</html>

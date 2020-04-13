@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>嵌入元素</title>
+	</head>
+	<body>
+		<a href="inner.html"><img src="img/img.png" alt="风景图" ismap="true" /></a>
+
+		<a href="inner.html"><img src="img/img.png" alt="风景图" border="0" usemap="#Map" />
+			<map name="Map">
+				<area shape="rect" coords="64,36,140,91" href="http://www.baidu.com" target="_blank" alt="百度">
+				<area shape="circle" coords="239,109,41" href="http://www.soso.com" target="_blank" alt="搜搜">
+				<area shape="poly" coords="34,156,59,125,110,123,135,159,92,181,53,188,138,199,162,181,79,207,171,148" href="http://www.haosou.com"target="_blank" alt="好搜">
+			</map>
+		</a>
+		
+		<br />
+		
+		<a href="http://www.baidu.com" target="in">百度</a> | <a href="http://www.haosou.com" target="in">好搜</a>
+		<br />
+		
+		<iframe src="http://www.soso.com" width="800" height="600" name="in"></iframe>
+		
+		<embed src="http://www.tudou.com/v/i4ZZvFwfluI/&bid=05&rpid=50797543&resourceId=50797543_05_05_99/v.swf" type="application/x-shockwave-flash"></embed>
+		
+		<progress value="30" max="100"></progress>
+		
+		<meter value="90" min="10" max="100" low="40" high="80" optimum="60"></meter>
+	</body>
+</html>

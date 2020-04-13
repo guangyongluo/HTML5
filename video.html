@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>视频和音频</title>
+	</head>
+	<body>
+		<!-- <video src="test.webm" width="640" height="480" controls autoplay loop muted></video> -->
+		
+		<!-- <video src="test.webm" width="640" height="480" controls poster="img.png"></video> -->
+		
+		<!-- <video src="http://li.cc/test.webm" width="640" height="480" controls preload="none"></video> -->
+		
+		<!-- <video src="http://li.cc/test.webm" width="640" height="480" controls preload="metadata"></video> -->
+		
+		<!-- <video src="http://li.cc/test.webm" width="640" height="480" controls preload="auto"></video> -->
+		
+		<video width="640" height="480" controls>
+			<source src="test.webm">
+			<source src="test.mp4">
+			<source src="test.ogg">
+			<object>实现flash插件的播放，如果屏蔽IE9以下则不需要</object>
+		</video>
+		
+		<audio controls>
+			<source src="test.mp3">
+			<source src="test.m4a">
+			<source src="test.wav">
+		</audio>
+	</body>
+</html>
