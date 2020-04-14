@@ -1,0 +1,11 @@
+@charset "utf-8";
+
+/* b {
+	font-style: italic;
+} */
+
+p {
+	color: red !important;
+	font-size: 20px;
+	font-weight: bold;
+}

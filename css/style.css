@@ -1,0 +1,35 @@
+@charset "utf-8";
+/* @import url("test.css"); */
+
+p {
+	color: yellow;
+	font-size: 10;
+}
+
+#abc {
+	color: red;
+}
+
+.abc {
+	color: blue;
+}
+
+b.abc {
+	color: orange;
+}
+
+.def {
+	font-size: 30px;
+}
+
+[href] {
+	color: aqua;
+}
+
+[type="password"] {
+	border: 1px solid red;
+}
+
+/* * {
+		border: 1px solid red;
+} */
