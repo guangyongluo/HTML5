@@ -1,0 +1,70 @@
+@charset "utf-8";
+
+body {
+	margin: 100px;
+}
+
+div {
+	width: 200px;
+	height: 200px;
+	background-color: green;
+	box-shadow: 2px 2px 2px gray;
+	margin: 200px;
+
+	/*平移*/
+	/*transform: translate(200px, 200px);*/
+	/*transform: translate(0, 200px);*/
+	/*transform: translateX(200px);*/
+	/*transform: translateY(200px);*/
+
+	/*缩放*/
+	/*transform: scale(1.5);*/
+	/*transform: scale(0.5);*/
+	/*transform: scale(1.5, 2.0);*/
+	/*transform: scaleX(0.5);*/
+	/*transform: scaleY(0.5);*/
+
+	/*旋转*/
+	/*transform: rotate(-45deg);*/
+
+	/*倾斜*/
+	/*transform: skew(45deg, 20deg);*/
+	/*transform: skewX(45deg);*/
+	/*transform: skewY(45deg);*/
+
+	/*通过六个值自定义矩形*/
+	/*transform: matrix(1, 0, 0, 1, 30, 30);*/
+
+	/*多个属性值空格隔开*/
+	/*transform: rotate(45deg) scale(1.5);*/
+
+	transform: rotate(45deg);
+
+	/*transform-origin: center center;*/
+	/*transform-origin: 50% 50%;*/
+
+	/*transform-origin: left top;*/
+	transform-origin: 0 0;
+}
+
+#a {
+	perspective: 2000px;
+	perspective-origin: top right;
+	transform-style: preserve-3d;
+}
+
+img {
+	/* transform: translate3d(100px, 100px, 300px); */
+	/* transform: translateZ(300px); */
+
+	/* transform: scale3d(1.5,1.5,2.5) rotateX(45deg); */
+	transform: scaleZ(1.5) rotateX(45deg);
+
+	/*transform: rotate3d(1,1,1,120deg);*/
+
+	/*transform: rotateX(120deg);*/
+	/*transform: rotateY(45deg);*/
+
+	/*transform: perspective(500px) rotateY(45deg);*/
+	/* transform: rotateY(45deg); */
+}

@@ -1,0 +1,46 @@
+@charset "utf-8";
+
+body {
+	margin: 100px;
+}
+
+div {
+	width: 200px;
+	height: 200px;
+	background-color: white;
+	border: 1px solid green;
+
+/*	animation-name: myani;
+	animation-duration: 1s;
+	animation-timing-function: ease;*/
+	/*animation-delay: 1s;*/
+	/*animation-iteration-count: infinite;*/
+	/*animation-iteration-count: 4;*/
+	/*animation-direction: alternate;*/
+	/*animation-play-state: paused;*/
+	/*animation-fill-mode: forwards;*/
+	/*animation-fill-mode: backforwards;*/
+	/*animation-iteration-count: 3;
+	animation-direction: alternate;
+	animation-fill-mode: both;*/
+	animation: myani 1s ease 2 alternate 1s both;
+}
+
+@keyframes myani {
+/*	0%, 100% {
+		background-color: white;
+		margin-left: 0px;
+	}
+	50% {
+		background-color: black;
+		margin-left: 100px;
+	}*/
+	form {
+		background-color: white;
+		margin-left: 0px;
+	}
+	to {
+		background-color: black;
+		margin-left: 100px;	
+	}
+}

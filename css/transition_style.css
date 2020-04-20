@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+body {
+	margin: 100px;
+}
+
+div {
+	width: 200px;
+	height: 200px;
+	border: 1px solid green;
+	background-color: white;
+	/* transition-property: background-color, color, margin-left;
+	transition-property: all;
+	transition-duration: 1s;
+	transition-timing-function: ease; */
+	/*transition-timing-function: linear;*/
+	/*transition-timing-function: ease-in;*/
+	/*transition-timing-function: cubic-bezier(0.25, 0.65, 0.88, 0.25);*/
+	/*transition-timing-function: steps(5, start);*/
+	/* transition-delay: 0s, 2s, 0s; */
+
+	transition: background-color 1s ease 0s, color 1s ease 0s, margin-left 1s ease 0s;
+	/* transition: all 1s ease-in 0s; */
+}
+
+div:hover {
+	background-color: black;
+	color: white;
+	margin-left: 100px;
+};

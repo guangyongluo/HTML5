@@ -1,0 +1,27 @@
+@charset "utf-8";
+
+div {
+	width: 400px;
+	height: 400px;
+	/* background:green; */
+	/* border-image-source: url(../img/border.png);
+	border-image-width: 27px;
+	border-image-slice: 27;
+	border-image-repeat: round; */
+	/*border-image-repeat: space;*/
+	/*border-image-repeat: round;*/
+	/*border-image-repeat: repeat;*/
+	/*border-image-repeat: stretch;*/
+
+
+	/*border-image-outset: 27px;*/
+	/*border-image-slice: 0 fill;*/
+	/*border-image-slice: 81;*/
+	/*border-width: 81px;*/
+
+	/* border-image-source: url(../img/border.png);
+	border-image-width: 10px;
+	border-image-slice: 10 fill; */
+	border: 1rem solid transparent;
+	border-image: url(../img/border.png) 27/27px round;
+}
