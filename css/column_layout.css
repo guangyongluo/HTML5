@@ -1,0 +1,16 @@
+@charset "utf-8";
+
+h1{
+	text-align: center;
+	-webkit-column-span: all;
+}
+
+div {
+	/* -webkit-columns: 3 auto; */
+	
+	-webkit-column-width: 200px;
+	-webkit-column-count: 3;
+	-webkit-column-gap: 80px;
+	-webkit-column-rule: 2px dashed gray;
+	
+}
