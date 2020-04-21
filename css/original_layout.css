@@ -1,0 +1,33 @@
+@charset "utf-8";
+
+body {
+	margin: 0;
+}
+
+table {
+	width: 1280px;
+	margin: 0 auto;
+	border-collapse: collapse;
+}
+
+.header {
+	height: 180px;
+	background-color: olive;
+}
+
+.aside {
+	width: 300px;
+	height: 600px;
+	background-color: purple;
+}
+
+.section {
+	width: 980px;
+	height: 600px;
+	background-color: maroon;
+}
+
+.footer {
+	height: 130px;
+	background-color: gray;
+}

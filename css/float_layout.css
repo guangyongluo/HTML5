@@ -1,0 +1,38 @@
+@charset "utf-8";
+
+body {
+	margin: 0 auto;
+	/*width: 960px;*/
+	width: auto;
+}
+
+header {
+	height: 180px;
+	background-color: olive;
+	margin: 0 auto;
+}
+
+aside {
+	/* width: 300px; */
+	width: 20%;
+	height: 600px;
+	background-color: purple;
+	padding: 10px;
+	border: 3px solid red;
+	box-sizing: border-box;
+	float: left;
+}
+
+section {
+	/* width: 980px; */
+	width: 80%;
+	height: 600px;
+	background-color: maroon;
+	float: right;
+}
+
+footer {
+	height: 130px;
+	background-color: gray;
+	clear: both;
+}
