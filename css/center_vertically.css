@@ -1,0 +1,56 @@
+@charset "utf-8";
+
+#d1 {
+	width: 200px;
+	height: 600px;
+	background-color: lightgray;
+	
+	display: table-cell;
+	
+	vertical-align: middle;
+}
+
+#d2 {
+	width: 200px;
+	height: 200px;
+	background-color: lightcoral;
+}
+
+#d3 {
+	width: 200px;
+	height: 200px;
+	background-color: lightgreen;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%); 
+}
+
+
+#d4 {
+	width: 200px;
+	height: 500px;
+	background-color: lightgray;
+	position: relative;
+}
+
+#d5 {
+	width: 200px;
+	height: 200px;
+	background-color: yellow;
+	
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%); 
+}
+
+#d6 {
+	width: 200px;
+	height: 200px;
+	background-color: gold;
+	
+	position: relative;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
