@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>两列布局</title>
+		<link rel="stylesheet" type="text/css" href="css/multilist_layout.css"/>
+	</head>
+	<body>
+		<p>使用float + margin实现两列布局，右列为定宽列，左列为自适应列</p>
+		<div class="left"></div>
+		<div class="right"></div>
+		
+		<h2>问题1：</h2>
+		<p>如果为右边自适应列的子级元素设置清除浮动：作为子级元素会显示在当前列的下方</p>
+		<p>为作为右边自适应列，添加父级容器元素</p>
+		<div class="left2"></div>
+		<div class="right2_container">
+			<div class="right2">
+			    <div class="inner2"></div>
+		    </div>
+		</div>
+
+        <p>使用float + overflow实现两列布局: 使用overflow开启BFC模式，但是开启overflow后有溢出问题</p>
+		<div class="left3"></div>
+		<div class="right3">
+			<div class="inner3"></div>
+		</div>
+		
+		<p>使用display:table来实现两列布局</p>
+		<div class="parent">
+			<div class="left4"></div>
+			<div class="right4"></div>
+		</div>
+	</body>
+</html>
