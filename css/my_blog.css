@@ -1,0 +1,28 @@
+@charset "utf-8";
+
+body {
+	margin: 0;
+	background-color: gray;
+}
+
+.container {
+	width: 75%;
+	height: 500px;
+	background-color: white;
+	
+	margin: 100px auto 0;
+}
+
+.left {
+	width: 300px;
+	height: 500px;
+	float: left;
+	
+	background-color: lightcoral;
+}
+
+.right {
+	height: 500px;
+	margin-left: 330px;
+	background-color: yellowgreen;
+}
