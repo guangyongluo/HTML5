@@ -1,0 +1,71 @@
+@charset "utf-8";
+
+body {
+	margin 0;
+}
+
+.parent {
+	display: table;
+	width: 800px;
+}
+
+.left, .right {
+	display: table-cell;
+}
+
+.left {
+	width: 300px;
+	background-color: lightcoral
+}
+
+.right {
+	width: 500px;
+	background-color: lightblue;
+}
+
+.parent2 {
+	border: 1px solid blue;
+	width: 800px;
+	
+	overflow: hidden;
+}
+
+.left2, .right2 {
+	float: left;
+	padding-bottom: 9999px;
+	margin-bottom: -9999px;
+}
+
+.left2 {
+	width: 300px;
+	background-color: lightcoral
+}
+
+.right2 {
+	width: 500px;
+	background-color: lightblue;
+}
+
+.parent3 {
+	column-count: 4;
+}
+
+.col1, .col2, .col3, .col4 {
+	height: 300px;
+}
+
+.col1 {
+	background-color: lightcoral;
+}
+
+.col2 {
+	background-color: lightblue;
+}
+
+.col3 {
+	background-color: lightgreen;
+}
+
+.col4 {
+	background-color: lightseagreen;
+}
