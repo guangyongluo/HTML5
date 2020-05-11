@@ -1,0 +1,153 @@
+@charset "utf-8";
+
+body {
+	margin: 0;
+}
+
+.col1, .col2, .col3, .col4, .col5{
+	width: 20%;
+	height: 200px;
+	
+	float: left;
+}
+
+.col1 {
+	background-color: lightcoral;
+}
+
+.col2 {
+	background-color: lightgreen;
+}
+
+.col3 {
+	background-color: blueviolet;
+}
+
+.col4 {
+	background-color: yellowgreen;
+}
+
+.col5 {
+	background-color: rosybrown;
+}
+
+.table {
+	display: table;
+	
+	width: 100%;
+}
+
+.table div {
+	display: table-cell;
+	
+	width: 20%;
+	height: 200px;
+}
+
+.col6 {
+	background-color: lightcoral;
+}
+
+.col7 {
+	background-color: lightgreen;
+}
+
+.col8 {
+	background-color: blueviolet;
+}
+
+.col9 {
+	background-color: yellowgreen;
+}
+
+.col10 {
+	background-color: rosybrown;
+}
+
+.container {
+	width: 1540px;
+	height: 300px;
+	
+	position: relative;
+	left: -10px;
+	margin: 0 auto;
+}
+
+.col_list{
+	width: 1550px;
+	height: 300px;
+}
+
+.col_list div {
+	width: 300px;
+	height: 300px;
+	
+	margin-left: 10px;
+	float: left;
+}
+
+.col11 {
+	background-color: lightcoral;
+}
+
+.col12 {
+	background-color: lightgreen;
+}
+
+.col13 {
+	background-color: blueviolet;
+}
+
+.col14 {
+	background-color: yellowgreen;
+}
+
+.col15 {
+	background-color: rosybrown;
+}
+
+p {
+	clear: both;
+}
+
+.parent{
+	width: 1580px;
+	height: 200px;
+	background-color: gray;
+	
+	overflow: hidden;
+}
+
+.list {
+	width: 1600px;
+	height: 200px;
+	background-color: gray;
+}
+
+.col16, .col17, .col18, .col19, .col20{
+	width: 300px;
+	height: 200px;
+	
+	float: left;
+	margin-right: 20px;
+}
+
+.col16 {
+	background-color: lightcoral;
+}
+
+.col17 {
+	background-color: lightgreen;
+}
+
+.col18 {
+	background-color: blueviolet;
+}
+
+.col19 {
+	background-color: yellowgreen;
+}
+
+.col20 {
+	background-color: rosybrown;
+}
