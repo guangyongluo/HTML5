@@ -335,12 +335,12 @@
 	background-color: #fafafa;
 }
 
-#container .ticket {
+#container .ticket , #container .scenery h2, #container .about h2 {
 	color: #666;
 	font-size: 20px;
 }
 
-#container .ticket h2 {
+#container .ticket h2, #container .scenery h2, #container .about h2 {
 	height: 40px;
 	line-height: 40px;
 	font-size: 30px;
@@ -481,4 +481,33 @@
 	color: #fff;
 	font-size: 20px;
 	text-align: center; 
+}
+
+#container .scenery figure {
+	border: 1px solid #ddd;
+	display: inline-block;
+	padding: 4px;
+	border-radius: 4px;
+	margin: 15px 3px 15px 0;
+	width: 430px;
+	text-align: left;
+}
+
+#container .scenery figcaption {
+	text-align: center;
+	padding: 5px 0;
+}
+
+#container .about p {
+	font-size: 20px; 
+	color: #666; 
+	line-height: 2; 
+	margin: 20px 0;
+}
+#container .about address {
+	font-style: normal; 
+	font-size: 20px; 
+	color: #666; 
+	margin: 20px 0; 
+	line-height: 1.6;
 }
