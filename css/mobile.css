@@ -43,6 +43,10 @@ div, figure, figcaption{
 	visibility: hidden;
 }
 
+.sm-visible {
+	display: none;
+}
+
 #header {
 	width: 100%;
 	height: 0.45rem;
