@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>异常值</title>
+		<script type="text/javascript">
+			//异常值
+			//Infinity ： 无穷大
+			//NaN      :  无意义
+			//Number.POSITIVE_INFINITY : 正无穷大
+			//Number.NEGATIVE_INFINITY : 负无穷大
+			//Number.NaN
+			var value1 = Number.POSITIVE_INFINITY;
+			console.log("value1 = %d", value1);
+			var value2 = Number.NEGATIVE_INFINITY;
+			console.log("value2 = %d", value2);
+			
+			var value3 = Number.MAX_VALUE * 2;
+			console.log("value3 = %d", value3);
+			var value4 = -Number.MAX_VALUE * 2;
+			console.log("value4 = %d", value4);
+			
+			console.log("1/0 = %d", 1/0);
+			console.log("-1/0 = %d", -1/0);
+			
+			console.log("0/0 = %d", 0/0);
+			
+			//异常值的比较
+			if(value1 == Number.POSITIVE_INFINITY){
+				console.log("value1 == Number.POSITIVE_INFINITY");
+			}
+			if(value2 == Number.NEGATIVE_INFINITY){
+				console.log("value2 == Number.NEGATIVE_INFINITY");
+			}
+			var value5 = Number.NaN;
+			if(value5 == Number.NaN) {
+				console.log("value5 == Number.NaN");
+			}
+			if(Number.isNaN(value5)){
+				console.log("Number.isNaN(value5)");
+			}
+			
+			//比较
+			var zero = 0;
+			var negz = -0;
+			if(zero == negz) {
+				console.log("zero == negz");
+			}
+			if(1/zero == 1/negz){
+				console.log("1/zero == 1/negz");
+			}
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
