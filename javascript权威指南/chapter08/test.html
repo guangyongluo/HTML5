@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>JavaScript函数</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			function flexisum(a){
+				var total = 0;
+				for(var i = 0; i < arguments.length; i++){
+					var element = arguments[i], n;
+					if(element == null) continue;
+					if(Array.isArray(element))
+						n = flexisum.apply(this, element);
+					else if(typeof element === "function")
+						n = Number(element());
+					else
+						n = Number(element);
+					
+					if(isNaN(n))
+						throw Error("flexisum(): can't convert " + element + " to number");
+					
+					total += n;
+				}
+				return total;
+			}
+			
+			var sum = flexisum([1,2,3,4,5], 6, 7, 8, 9, 10);
+			
+			console.log(sum);
+			
+			var map = function(a, f){
+				var results = [];
+				for(var i = 0, len = a.length; i < len; i++){
+					if(i in a) results[i] = f.call(null, a[i], i, a);
+				}
+				return results;
+			};
+			
+			var array = [1,2,3,4,5];
+			var results = map(array, function(x){return x * x});
+			console.log(results);
+			
+			
+			var reduce = function(a, f, initial){
+				var i = 0, len = a.length, accumulator;
+				
+				if(arguments.length > 2) 
+					accumulator = initial;
+				else{
+					if(len == 0) throw TypeError();
+					while(i < len) {
+						if(i in a){
+							accumulator = a[i++];
+							break;
+						}
+						else i++;
+					}
+					if(i == len) throw TypeError();
+				}
+				
+				while(i < len){
+					if(i in a)
+						accumulator = f.call(undefined, accumulator, a[i], i, a);
+					i++;
+				}
+				
+				return accumulator;
+			}
+			
+			results = reduce([1,2,3,4,5], function(x, y){ return x + y; });
+			
+			function compose(f, g){
+				return function(){
+					return f.call(this, g.apply(this, arguments));
+				}
+			}
+			
+			function array1(a, n) {
+				return Array.prototype.slice.call(a, n || 0);
+			}
+			
+			function partialLeft(f){
+				var args = arguments;
+				return function(){
+					var a = array1(args, 1);
+					a = a.concat(array1(arguments));
+					return f.apply(this, a);
+				}
+			}
+			
+			function partialRight(f){
+				var args = arguments;
+				return function(){
+					var a = array1(arguments);
+					a = a.concat(array1(args, 1));
+					return f.apply(this, a);
+				}
+			}
+			
+			function partial(f){
+				var args = arguments;
+				return function(){
+					var a = array1(args, 1);
+					var i = 0, j = 0;
+					for(; i < a.length; i++)
+						if(a[i] === undefined)
+							a[i] = arguments[j++];
+					a = a.concat(array1(arguments, j))
+					return f.apply(this, a);
+				}
+			}
+			
+			var f = function(x, y, z){
+				return x * (y + z);
+			};
+			
+			partialLeft(f, 2)(3, 4);
+			partialRight(f, 2)(3, 4);
+			partial(f, undefined, 2)(3, 4);
+			
+			function Complex(real, imaginary){
+				if(isNaN(real) || isNaN(imaginary))
+					throw new TypeError();
+				this.r = real;
+				this.i = imaginary;
+			}
+			
+			Complex.prototype.add = function(that){
+				return new Complex(this.r + that.r, this.i + that.i);
+			}
+			
+			Complex.prototype.mul = function(that){
+				return new Complex(this.r * that.r - this.i * that.i, this.r * that.i + this.i + that.r);
+			}
+			
+			Complex.prototype.mag = function(){
+				return Math.sqrt(this.r * this.r + this.i * this.i);
+			}
+			
+			Complex.prototype.neg = function(){
+				return new Complex(-this.r, -this.i);
+			}
+			
+			Complex.prototype.toString = function(){
+				return "{" + this.r + ", " + this.i + "}";
+			}
+			
+			Complex.prototype.equals = function(that){
+				return that != null && that.constructor === Complex && this.r === that.r && this.i === that.i;
+			}
+			
+			Complex.ZERO = new Complex(0, 0);
+			Complex.ONE = new Complex(1, 0);
+			Complex.I = new Complex(0, 1);
+			
+			Complex.parse = function(s){
+				try{
+					var m = Complex._format.exec(s);
+					return new Complex(parseFloat(m[1]), parseFloat(m[2]));
+				}catch(x){
+					throw new TypeError("can't parse '" + s + "' as a complex number");
+				}
+			};
+			
+			Complex._format = /^\{([^,]+),([^}]+)\}$/;
+			
+			var n = 3;
+			Number.prototype.times = function(f, context){
+				var n = Number(this);
+				for(var i = 0; i < n; i++)
+					f.call(context, i);
+			}
+			n.times(function(n) {console.log(n + "hello"); });
+			
+			function type(o) {
+				var t, c, n;
+				
+				if(o === null) {
+					return "null";
+				}
+				
+				if(o !== o) {
+					return "nan";
+				}
+				
+				if((t = typeof o) !== "object"){
+					return t;
+				}
+				
+				if((c = classof(o)) !== "Object"){
+					return c;
+				}
+				
+				if(o.constructor && typeof o.constructor === "function" && (n = o.constructor.getName())){
+					return n;
+				}
+				
+				return "Object";
+			}
+			
+			function classof(o){
+				return Object.prototype.toString().call(o).slice(8, -1);
+			}
+			
+			Function.prototype.getName = function(){
+				if("name" in this) return this.name;
+				return this.name = this.toString().match(/function\s*([^(]*)\(/)[1]);
+			}
+			
+			function quacks(o){
+				for(var i = 1; i < arguments.length; i++){
+					var arg = arguments[i];
+					switch(typeof arg){
+						case 'string':
+							if(typeof o[arg] !== "function") return false;
+							continue;
+						case 'function':
+							arg = arg.prototype;
+						case 'object':
+							for(var m in arg){
+								if(typeof arg[m] !== "function") continue;
+								if(typeof o[m] !== "function") return false;
+							}
+					}
+				}
+			}
+			
+			
+		</script>
+	</body>
+</html>

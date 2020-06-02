@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//字符串
+			var value1 = "I love you.";
+			var value2 = "超人";
+			var value3 = value1 + value2;
+			console.log(value3);
+			
+			var value4 = "abc\
+			xyz";
+			console.log(value4);
+			
+			//转义符
+			//1. 输出特殊字符
+			//2. 输出与Unicode对应的字符
+			// 转义符必须以反斜线开头
+			console.log("abc\txyz");
+			console.log("第一行\n第二行");
+			
+			console.log("双引号：\"abc\"");
+			console.log('单引号：\'xyz\'');
+			
+			console.log("\x41");
+			console.log("\u0041");
+			console.log("\u4E16");
+			
+			//如果反斜杠后面的字符不是转义字符，则忽略反斜杠
+			console.log("a\yz");
+			//输出反斜线
+			console.log("中\\国");
+			
+			//字符串操作
+			var str1 = "I love " + "you.";
+			var str2 = "who are you?";
+			var str3 = str1 + str2;
+			console.log("str3 = " + str3);
+			
+			//字符串的长度
+			console.log("str3的长度：%d", str3.length);
+			
+			var str4 = "泰山";
+			console.log("str4的长度：%d", str4.length);
+			
+			var length = str3.length;
+			var str5 = "";
+			for(var i = 0; i < length; i++){
+				if(str3.charAt(i) != " "){
+					str5 += "<" + str3.charAt(i) + ">";
+				}
+			}
+			console.log("str5 : " + str5);
+			
+			//子字符串
+			console.log("")
+		</script>
+	</body>
+</html>
