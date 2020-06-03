@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>let和const关键字</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//let和var一样，都是用来声明变量的。
+			//let和var的作用域时不同的，var可以跨代码块，也就是说在代码块内部声明的变量，外部也可以使用。let只有在代码块内部有效，如果超出代码块，会显示undefined.
+			// {
+			// 	let a = 100;
+			// 	var b = 200;
+			// 	alert(a);
+			// 	alert(b);
+			// }
+			
+			// if(typeof a == 'undefined'){
+			// 	alert('a未定义');
+			// }
+			
+			// alert(b);
+			
+			// for(let i = 0; i < 10; i++){
+			// 	console.log(i);
+			// }
+			// alert(i);
+			
+			// var a = [];
+			// for(var i = 0; i < 10; i++){
+			// 	a[i] = function(){
+			// 		console.log(i);
+			// 	}
+			// }
+			// a[3]();
+			
+			//let会形成暂时性死区
+			// {
+			// 	let s;
+			// 	s = "hello world!";
+			// }
+			
+			// {
+			// 	let x = 20;
+			// 	var x = 30;
+			// 	alert(x);
+			// }
+			
+			// function fun(arg){
+			// 	var arg;
+			// }
+			
+			// alert(x);
+			
+			// 1.需要块级作用域的原因：
+			// 场景1：内层变量可能会覆盖外层变量
+			// var s = "Hello, World!";
+			// function fun(){
+			// 	console.log(s);
+			// 	if(false){
+			// 		var s = "hahaha";
+			// 	}
+			// 	console.log(s);
+			// }
+			// fun();
+			
+			// 场景2：局部变量泄露成全局变量
+			// for(var i = 0; i < 10; i++){
+			// 	console.log(i);
+			// }
+			// console.log("for循环外：" + i);
+			
+			// 场景3：块级作用域的嵌套
+			// 场景4：块级作用域和匿名函数
+			// 场景5：let和var执行和不执行的区别
+			// function fun(){
+			// 	console.log("我是外部函数");
+			// }
+			// var m = 100;
+			// (function(){
+			// 	if(false){
+			// 		function fun(){
+			// 			console.log("我是内部函数");
+			// 		}
+			// 		var m = 30;
+			// 	}
+			// 	// fun();
+			// 	console.log(m);
+			// })();
+			// 场景6：引用块级作用域内定义的函数
+			// {
+			// 	let s = "you_name";
+			// 	function my_fun(){
+			// 		console.log(s);
+			// 	}
+			// }
+			// my_fun();
+			
+			// let let_fun;
+			// {
+			// 	let_fun = function(){
+			// 		return "ok";
+			// 	}
+			// }
+			// console.log(let_fun());
+			
+			// const PI = 3.1415926;
+			// PI = 3.14;
+			//const用于声明常量，一旦声明，在改变常量的值，就会抛出异常
+			//const的作用域和let相同，只在声明所在的块级作用域内有效
+			// let和const声明一个变量后，不予许在使用var、let、const声明同名变量
+			// {
+			// 	var value1 = "hello";
+			// 	var value1 = "world";
+			// 	// let value1 = "h";
+			// 	const value1 = "h";
+			// }
+			
+			//常量对象可以设置对象的属性和方法，但不能再次设置对象本身，也就是说不能将引用指向另一个新的对象。
+			// const obj = {"name":"Bill"}
+			// console.log(obj.name);
+			// obj.name = "Mary";
+			// console.log(obj.name);
+			
+			//冻结对象
+			// const obj1 = Object.freeze({"name":"Mike"});
+			// console.log("obj1.name (改变前) = " + obj1.name);
+			// obj1.name = "John";
+			// console.log("obj1.name (改变后) = " + obj1.name);
+			
+			//冻结数组
+			// const arr1 = Object.freeze(["x","y"]);
+			// console.log("改变前的数组长度：" + arr1.length);
+			// arr1.push("z"); //抛出异常和对象的表现不同
+			// console.log("改变后的数组长度：" + arr1.length);
+			
+			const obj2 = Object.freeze({"name":"John", "info":{"salary":5000,"age":40}});
+			console.log(obj2.name);
+			obj2.name = "Mary";
+			console.log(obj2.name);
+			
+			
+			console.log("改变之前：salary = " + obj2.info.salary);
+			obj2.info.salary = 3333;
+			console.log("改变之后：salary = " + obj2.info.salary)
+			console.log("--------------------------");
+			//深度冻结对象
+			var depthFreezeObject = (obj) => {
+				//冻结顶层对象的属性
+				Object.freeze(obj);
+				Object.keys(obj).forEach((key, value) => {
+					if(typeof obj[key] == 'object'){
+						depthFreezeObject(obj[key]);
+					}
+				});
+				return obj;
+			};
+			const depthObj = depthFreezeObject({"name":"John", "info":{"salary":5000,"age":40}});
+			console.log("改变之前：salary = " + depthObj.info.salary);
+			depthObj.info.salary = 8000;
+			console.log("改变之前：salary = " + depthObj.info.salary);
+			
+			
+			
+		</script>
+	</body>
+</html>
