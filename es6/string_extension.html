@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>字符串扩展</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//  Unicode是一种字符的编码方式，可以将一个字符对应成一个数字
+			// \uxxxx  xxxx表示16进制的数字   \u0000到\uFFFF
+			// Unicode2：🐒  \u1f412
+			var s = "中";
+			console.log(s.length);
+			console.log("中:" + s.charCodeAt(0).toString(16)); // \u4e2d
+			console.log("中:" + s.codePointAt(0).toString(16)); // \u4e2d
+			console.log("\u4e2d");
+			console.log("\u{1f412}");  // unicode2
+			var ss = "🐒";
+			console.log(ss.length);
+			console.log("🐒:" + ss.charCodeAt(0).toString(16));
+			console.log("🐒:" + ss.charCodeAt(1).toString(16));
+			console.log("\ud83d\udc12");  // utf-16
+			// unicode1：65536  
+			//  获取unicode2编码
+			console.log("🐒:" + ss.codePointAt(0).toString(16));
+			console.log("🐒:" + ss.codePointAt(1).toString(16));
+			
+			/*
+			 * 0x1f412  二进制：1111 0100 0001 0010
+			 * 转换为utf-16
+			 * (1)  unicode2编码减去 0x10000 
+			 * 0x1f412 - 0x10000 = 0xf412(0000111101 0000010010)
+			 * (2) 高位：0xD800..0xDBFF
+			 * 0000111101 + 0xD800（1101 1000 0000 0000） = 1101 1000 0011 1101(高16位)[0xD83D]
+			 * (3) 低位：0xDC00
+			 * 0000010010 + 0xDC00（1101 1100 0000 0000） = 1101 1100 0001 0010(低16位)[0xDC12]
+			 * 
+			 */
+			
+			function is32Bit(c){
+					return c.codePointAt(0) > 0xFFFF;
+			}
+			console.log(is32Bit("中"));
+			console.log(is32Bit("a"));
+			console.log(is32Bit("🐒"));
+			
+			
+			// ES5 String.fromCharCode()  不能处理超过0xFFFF
+			console.log(String.fromCharCode(0x9f99));
+			// 0x1f412
+			console.log(String.fromCharCode(0x1f412));
+			console.log(String.fromCodePoint(0x1f412));
+			
+			
+			// ES6为字符串添加了遍历器接口，使字符串可以由for...of循环遍历
+			for(let c of 'world'){
+				console.log(c);
+			}
+			var text = String.fromCodePoint(0x1f412);
+			for(let i = 0; i < text.length;i++){
+				console.log(text[i]);
+			}
+			
+			for(let i of text){
+				console.log(i);
+			}
+			
+			//  ES5:indexOf
+			console.log("abcde".indexOf("cd",0));
+			
+			// ES6
+			// includes()：boolean，true：表示子字符串在原字符串中存在，false：表示不存在
+			// startsWith():boolean, true:表示原字符串是以指定子字符串开头
+			// endsWith():boolean,true:表示原字符串是以指定子字符串结尾
+			
+			console.log("hello world".includes("w"));
+			console.log("hello world".startsWith("hello"));
+			console.log("hello world".endsWith("world1"));
+			
+			//  repeat：将一个字符串重复n次
+			console.log("x".repeat(5));
+			console.log("hello".repeat(10));
+			console.log("h".repeat(0));  // 输出长度为0的字符串
+			
+			//  如果repeat方法的参数是浮点数，会将浮点数转换为整数
+			//  采用的是舍去的取整方法
+			console.log("wow".repeat(2.3));  // 2.3 => 2
+			console.log("wow".repeat(2.9));  // 2.9 => 2
+			
+			// 如果repeat方法的参数是负数或Infinity
+			//"ha".repeat(-1); // 抛出异常
+			//"ha".repeat(Infinity);  // 抛出异常
+			
+			// 特例：0到-1之间的浮点数，等同于0
+			console.log("ha".repeat(-0.5));
+			console.log("ha".repeat(NaN)); 
+			
+			//  如果repeat方法的参数是字符串，会先将字符串转换为数值型再进行处理
+			console.log("ok".repeat("4"));
+			console.log("ok".repeat('ok'));  // 如果字符串参数值无法转换为数值，等同于0
+			
+			// 模板字符串是一种增强型的字符串
+			// 'abcd'、"abcd"
+			// `abcd`
+			// 保留字符串的格式
+			/*console.log("hello world");*/
+			console.log(`hello 
+			world`);
+			
+			var name = "Bill";
+			//var s = "你的名字是${name}";
+			var s = `你的名字是${name}`;
+			console.log(s);
+			
+			// 大括号内可以放任何表达式，可以进行运算
+			var x = 20;
+			var y = 30;
+			console.log("${x} + ${y} = ${x + y}");
+			console.log(`${x} + ${y} = ${x + y}`);
+			
+			//  模板字符串中还能调用函数
+			function fun()
+			{
+				return "It's beautiful";
+			}
+			console.log(`wow ${fun()}`);
+			
+			// 如果大括号内部是字符串，按原样输出
+			console.log(`Hello ${'world'}`);
+			
+			//  如果大括号内部引用的变量不存在，会抛出异常
+			//console.log(`This is a ${abc}`);
+			
+			//  引用模板字符串本身
+			//  方法1：
+			let str1 = 'return ' + '`Hello ${name}`';
+			let func1 = new Function('name', str1);
+			console.log(func1("Mike"));
+			
+			// 方法2：
+			let str2 = '(name)=>`Hello ${name}`';
+			let func2 = eval.call(null, str2);
+			console.log(func2('Mary'));
+			
+			
+			// 标签模板：函数的一种特殊调用形式
+					
+			// 第一种形式
+			function func3(s, n1, n2,n3){
+				console.log(s);
+				console.log(n1);
+				console.log(n2);
+				console.log(n3);
+			}
+			//func3("abc", 20,30);
+			
+			// 调用格式：函数名+模板字符串
+			var n1 = 20;
+			var n2 = 30;
+			func3`abc${n1} xyz${n2}ok${n2 + n1}ddd`;
+			
+			//  第二种形式
+			function func4(s){
+				console.log(s);
+				console.log(arguments.length);
+				console.log(arguments[1]);
+				console.log(arguments[2]);
+				console.log(arguments[3]);
+			}
+			func4`abc${n1}xyz${n2}kk${n2 - n1}1024`;
+			// 第三种形式
+			function func5(s, ...values){
+				console.log(s);
+				for(var i = 0; i < values.length;i++){
+					console.log(values[i]);
+				}
+			}
+			func5`hello ${n1} world ${n2} ${n1 + n2}xyz${n2 * n1}`;
+			
+			// 标签模板的应用
+			function saferHTML(templateData){
+				var s = templateData[0];
+				for(var i = 1;i < arguments.length;i++){
+					var arg = String(arguments[i]);
+					s += arg.replace(/&/g, '&amp;')
+							.replace(/</g,'&lt;')
+							.replace(/>/g, '&gt;');
+					s += templateData[i];
+				}
+				return s;
+			}
+			var sender = '<script>';
+			var message = saferHTML`<p>${sender}has sent you a message</p>`;
+			console.log(message);
+			
+			
+			<!-- String.raw方法 -->
+			//  直接输出最原始的字符串
+			console.log("abc \n xyz");
+			console.log(String.raw`abc \n xyz`);
+			console.log(String.raw`abc \\n xyz`);
+			 
+			//  raw也可以作为普通函数使用
+			// h1exl3lo
+			console.log(String.raw({raw:'hello'},1,'x',3));
+			console.log(String.raw({raw:['h','e','l','l','o']},1,'x',3));
+		</script>
+	</body>
+</html>

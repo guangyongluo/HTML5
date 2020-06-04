@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>模板字符串</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			let str = 'return' + '`Hello ${name}!`';
+			let func = new Function('name', str);
+			console.log(func('Jack'));
+			
+			var template = `
+			<ul>
+			  <% for(var i = 0; i < data.supplies.length; i++){ %>
+			    <li><%= data.supplies[i] %></li>
+			  <% } %>
+			</ul>
+			`;
+			
+			function compile(template){
+			  const evalExpr = /<%=(.+?)%>/g;
+			  const expr = /<%([\s\S]+?)%>/g;
+			
+			  template = template
+			    .replace(evalExpr, '`); \n  echo( $1 ); \n  echo(`')
+			    .replace(expr, '`); \n $1 \n  echo(`');
+			
+			  template = 'echo(`' + template + '`);';
+			
+			  let script =
+			  `function parse(data){
+			    let output = "";
+			
+			    function echo(html){
+			      output += html;
+			    }
+			
+			    ${ template }
+			
+			    return output;
+			  }`;
+			
+			  return script;
+			}
+			
+			let fun = eval(compile(template));
+			console.log(fun);
+			console.log(parse({ supplies: [ "broom", "mop", "cleaner" ] }));
+			
+			let total = 30;
+			let msg = passthru`The total is ${total} (${total*1.05} with tax)`;
+			
+			function passthru(literals) {
+			  let result = '';
+			  let i = 0;
+			
+			  while (i < literals.length) {
+			    result += literals[i++];
+			    if (i < arguments.length) {
+			      result += arguments[i];
+			    }
+			  }
+			
+			  return result;
+			}
+			
+			let value = passthru(msg);
+
+		</script>
+		
+		<div></div>
+	</body>
+</html>
