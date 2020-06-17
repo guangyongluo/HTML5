@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>修饰器</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			class Math{ 
+				@log
+				add(a, b){
+					return a + b;
+				}
+			}
+			
+			function log(target, name, descriptor){
+				var oldValue = descriptor.value;
+				
+				descriptor.value = function(){
+					console.log(`Calling "${name}" with`, arguments);
+					return oldValue.apply(null, arguments);
+				};
+				
+				return descriptor;
+			}
+			
+			const math = new Math();
+			
+			math.add(2, 4);
+			
+		</script>
+	</body>
+</html>

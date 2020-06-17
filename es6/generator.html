@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Generator函数</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			function* fun() {
+				for(var i = 0; true; i++){
+					var reset = yield i;
+					if(reset) {i = -1;}
+				}
+			}
+			
+			var g = fun();
+			
+			console.log(g.next());
+			console.log(g.next());
+			console.log(g.next(true));
+			console.log(g.next());
+			
+			
+			function run(fn){
+				var gen = fn();
+				
+				function next(err, data){
+					var result = gen.next(data);
+					if(result.done) return;
+					result.value(next);
+				}
+				
+				next();
+			}
+			
+			
+		</script>
+	</body>
+</html>
