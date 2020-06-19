@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>函数扩展</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//  ES5的方法
+			/////////////////////
+			function write(x, y) {
+				//  无效的值：undefined、NaN、null、''（空串）
+				y = y || 'JavaScript';
+				console.log(x, y);
+			}
+			write('Hello', 'World');
+			write('Hello');
+			write('Hello', NaN);
+			write('Hello', null);
+			write('Hello', '')
+
+			// 其他判断函数参数默认值的方法
+			// 方法1
+			function write1(x, y) {
+				if (typeof y == 'undefined') {
+					y = 'JavaScript'
+				}
+				console.log(x, y);
+			}
+			//  方法2
+			function write2(x, y) {
+				if (arguments.length == 1) {
+					y = 'JavaScript'
+				}
+				console.log(x, y);
+			}
+			write1('Hello');
+			write1('Hello', '');
+			write2('Hello');
+			write2('Hello', '');
+			///////////////////
+
+			// ES6
+			function write3(x, y = 'JavaScript') {
+				console.log(x, y)
+			}
+			write3('Test')
+			write2('Test', '');
+
+			function Product(name = 'iPhone', price = 6000) {
+				this.name = name;
+				this.price = price;
+			}
+			var product = new Product()
+			console.log(product.name);
+			console.log(product.price);
+
+			function fun1({
+				x,
+				y = 5
+			}) {
+				console.log(x, y)
+			}
+			//fun1();
+			fun1({});
+			fun1({
+				x: 10
+			});
+			fun1({
+				x: 12,
+				y: 20
+			});
+
+			function fun2(n, {
+				value1 = '',
+				value2 = 20
+			}) {
+				console.log(value2);
+			}
+			//fun2(123)  // error
+			fun2(123, {});
+			fun2(123, {
+				value2: 100
+			})
+
+			// 解构赋值默认值和函数参数默认值结合
+			function fun3(n, {
+				value1 = 'hello'
+			} = {}) {
+				console.log(value1);
+			}
+			fun3(200);
+			fun3(123, {
+				value1: 'xyz'
+			});
+
+			//  两种例子，有什么区别
+			function f1({
+				x = 0,
+				y = 0
+			} = {}) {
+				console.log(x, y);
+			}
+
+			function f2({
+				x,
+				y
+			} = {
+				x: 0,
+				y: 0
+			}) {
+				console.log(x, y);
+			}
+			console.log("-------------------");
+			f1()
+			f2()
+			console.log("-------------------");
+			f1({
+				x: 10,
+				y: 20
+			})
+			f2({
+				x: 10,
+				y: 20
+			})
+			console.log("-------------------");
+			f1({
+				x: 20
+			}); // 20, 0  
+			f2({
+				x: 20
+			}); // 20, undefined
+			console.log("-------------------");
+			f1({}); // 0 0
+			f2({}); // undefined undefined
+			console.log("-------------------");
+			f1({
+				p: 10
+			}); // 0 0
+			f2({
+				p: 20
+			}); // undefined undefined
+
+			// demo1
+			function fun1(x, y, z = 20) {
+				console.log(z);
+			}
+			fun1(1, 2, 3);
+			fun1(1, 2);
+
+			// demo2
+			function fun2(x, y = 123, z = 200) {
+				console.log(y, z);
+			}
+			fun2(20);
+			fun2(20, 44);
+
+			// demo3
+			function fun3(x, y = 345, z) {
+				console.log(y);
+			}
+			fun3(20, 123, 100);
+
+			//  length属性从左向右检测函数参数属性，一旦遇到第一个
+			//  有默认值的参数，就会停止检测，并返回第一个带有默认值参数
+			//  前面参数的个数
+			console.log((function(x) {}).length)
+			console.log((function(x = 10) {}).length)
+			console.log((function(x, y = 100, z, t) {}).length) // 1
+			console.log((function(x, y, z = 100) {}).length) // 2
+			console.log((function(x, ...args) {}).length) // 1
+
+			var x = 10;
+
+			function fun1(m, y = x) {
+				console.log(y);
+			}
+			fun1(100);
+			/*  error
+		    function fun2(m, y = n)
+		    {
+			   let n = 90;
+			   console.log(y);
+		    } */
+			// fun2(100)
+			var value = 'hello';
+
+			function fun3(value = 'xyz', func = x => value) {
+				console.log(func());
+			}
+			fun3()
+
+			function throwIfMissing() {
+				throw new Error('必须指定该参数值');
+			}
+
+			function fun1(x, y = throwIfMissing()) {
+				console.log(y);
+			}
+
+			fun1(10);
+
+			function fun2(x, y = undefined) {
+				console.log(y)
+			}
+
+			// rest参数：...变量名
+			function add(...values) {
+				let sum = 0;
+				for (var v of values) {
+					sum += v;
+				}
+				return sum;
+			}
+
+			console.log(add(1, 4, 5, 7))
+
+			function fun1(a, b, ...c) {
+				console.log(a, b);
+				for (var v of c) {
+					console.log(v)
+				}
+			}
+			fun1(1, 2, 3, 4)
+			// arguments
+			// arguments和rest参数的区别
+			function sort1() {
+				const sortedNumbers = Array.prototype.slice.call(arguments).sort();
+				return sortedNumbers;
+			}
+			console.log(sort1(3, 2, 1))
+
+			function sort2(...numbers) {
+				const sortedNumbers = numbers.sort();
+				return sortedNumbers;
+			}
+
+			console.log(sort2(5, 4, 3));
+
+			function fun2(a, b, c, d, ...e) {
+				// arguments考虑的是值参
+				console.log(arguments.length) // 10
+			}
+			fun2(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+			console.log((function(a, b, c, d, ...e) {
+				console.log(arguments.length) // 10
+			}).length) // 4  考虑的是形参，但不包括rest参数和带默认值的参数
+
+			// 扩展运算符使用（...）表示
+			var values = [1, 2, 3, 4];
+			console.log(...values);
+			console.log(values);
+
+			console.log('abc', 'xyz', ...values, 30);
+
+			function addNumbers(...numbers) {
+				var sum = 0;
+				for (var n of numbers) {
+					sum += n;
+				}
+				return sum;
+			}
+			var arr = [1, 4, 7, 12, -3];
+
+			// console.log(addNumbers(arr))  // error 对于rest参数，只能传递多个单值，不能传递数组
+
+			console.log(addNumbers(...arr)) // ok
+
+
+			// 合并数组
+			var arr1 = ['a', 'b']
+			var arr2 = ['c', 'd']
+			var arr3 = ['e', 'f']
+
+			// ES5
+			var arr4 = arr1.concat(arr2, arr3);
+			console.log(arr4);
+
+			// ES6
+			var arr5 = [...arr1, ...arr2, ...arr3]
+			console.log(arr5)
+
+			// 将扩展运算符与解构赋值结合
+			const [a, ...b] = [1, 2, 3, 4]; // ...b rest参数
+			console.log(a);
+			console.log(...b);
+
+			const [first, ...rest] = [];
+			console.log(first); // undefined
+			console.log(rest); // []
+
+			const [x, ...y] = [10];
+			console.log(x)
+			console.log(y)
+
+			//const [...k, t] = [10,20] // error rest必须是数组的最后一个元素
+
+			// 函数的返回值
+
+			function fun1() {
+				return [1, 2, 3, 4]
+			}
+
+			function fun2(a, b, c, d) {
+				console.log(a, b, c, d)
+			}
+			var values = fun1();
+			fun2(...values) //  可以通过扩展运算符将函数返回的数组解析成多个值
+
+			//  字符串
+			var str = "hello";
+			var strArray = [...str]; // 不能是...str
+			console.log(strArray);
+
+			console.log('a\uD83D\uDE80b'.length); // 4，无法获得真正的字符串长度
+			console.log([...'a\uD83D\uDE80b'].length);
+			console.log([...'a\uD83D\uDE80b'][1])
+
+			function length(str) {
+				return [...str].length
+			}
+			console.log(length([...'a\uD83D\uDE80b']));
+
+			var str = 'a\uD83D\uDE80b';
+			console.log(str);
+			var str1 = str.split('').reverse().join('');
+			//b\uDE80\uD83D\a';
+			console.log(str1);
+			var str2 = [...str].reverse().join('');
+			console.log(str2)
+
+			// 可以处理类似数组的对象
+
+			// Iterator
+			let map = new Map(
+				[
+					[1, 'one'],
+					[2, 'two'],
+					[3, 'three']
+				]
+			);
+			let arrKeys = [...map.keys()];
+			console.log(...arrKeys);
+			let arrValues = [...map.values()];
+			console.log(...arrValues)
+
+
+			function myfun() {
+
+			}
+			console.log(myfun.name);
+
+			var fun1 = function() {}
+			// 匿名函数：ES5是空串，ES6是变量名
+			console.log(fun1.name) // fun1
+
+			var fun2 = function process() {}
+			console.log(fun2.name); // process
+
+			console.log((new Function).name) // anonymous
+			function test() {}
+			console.log(test.bind({}).name) // bound test
+
+			// function name(){}
+			// 什么是箭头函数：使用=>定义的函数
+			//  =>的左侧表示函数的参数，右侧表示函数体
+			//  如果=>右侧只有一条语句，该条语句将作为return的参数
+
+			var f = x => x;
+			console.log(f(100))
+			//  相当于
+			var f1 = function(x) {
+				return x;
+			}
+			//  如果箭头函数的参数没有，或有多个参数
+			var f2 = () => 123;
+			f2 = function() {
+				return 123;
+			}
+
+			//  多个参数
+			var f3 = (x, y, z) => x + y + z;
+			console.log(f3(4, 5, 6));
+
+			f3 = function(x, y, z) {
+				return x + y + z;
+			}
+
+			var f4 = (x, y, z) => {
+				let m = x + y;
+				z = m * m;
+				return z;
+			}
+			console.log(f4(1, 2, 3));
+
+			// 箭头函数和变量结构结合使用
+			var f5 = ({
+				first,
+				last
+			}) => first + '.' + last;
+
+			var person = {
+				first: 'Bill',
+				last: 'Gates'
+			};
+			console.log(f5(person));
+
+			function f6(person) {
+				return person.first + '.' + person.last;
+			}
+			console.log(f6(person));
+
+			// 可以简化回调函数
+			var arr1 = [1, 2, 3, 4, 5].map(
+				function(x) {
+					return x * x;
+				}
+			);
+			console.log(arr1)
+
+			var arr2 = [1, 2, 3, 4, 5].map(x => x * x)
+			console.log(...arr2)
+
+			var values = [5, 4, 2, 8, 3];
+			var result1 = values.sort(function(a, b) {
+				return a - b
+			})
+			console.log(...result1)
+			var result2 = values.sort((a, b) => a - b);
+			console.log(...result2)
+
+			var fun = (...nums) => nums; // rest参数也可以用于箭头函数
+			console.log(fun(1, 2, 3, 4, 5, 6))
+		</script>
+	</body>
+</html>
