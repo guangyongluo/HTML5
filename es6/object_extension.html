@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>对象扩展</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			// ES5
+			var obj1 = {
+				name: 'Bill'
+			};
+			console.log(obj1.name)
+
+			// ES6
+			var name = 'Mike';
+			var obj2 = {
+				name
+			};
+			console.log(obj2.name);
+
+			// ES6中的返回方式
+			function fun1(x, y, z) {
+				return {
+					x,
+					y,
+					z
+				};
+			}
+
+			// ES5中的返回方式
+			function fun2(x, y, z) {
+				return {
+					x: x,
+					y: y,
+					z: z
+				};
+			}
+			console.log(fun1(1, 2, 3))
+			console.log(fun2(4, 5, 6));
+
+			// ES5：方法的传统表示法
+			var obj3 = {
+				process: function() {
+					return "I love you."
+				}
+			};
+
+			// ES6：方法的简洁表示法
+			var obj4 = {
+				process() {
+					return "How are you?"
+				}
+			}
+			console.log(obj3.process());
+			console.log(obj4.process());
+
+			let price = 7000;
+
+			var product = {
+				productName: 'iPhone7 Plus',
+				price,
+				buy(name, currentPrice) {
+					console.log('已经购买');
+					return {
+						name,
+						currentPrice,
+						discount: price - currentPrice
+					};
+				}
+			}
+			console.log(product.productName);
+			console.log(product.buy('John', 6500));
+
+			// ES5
+			// 有三种向对象中添加属性的方法
+			// 其中两种是动态的，一种是静态的
+			//  静态添加属性
+			var obj1 = {
+				name: 'Bill'
+			};
+			//  动态一
+			obj1.age = 30;
+			//  动态二
+			obj1['salary'] = 2000;
+
+			obj1['hello' + 'world'] = 'hello world';
+			const p = 'x';
+			obj1[p + p] = 'xx';
+			console.log(obj1.name)
+			console.log(obj1.age)
+			console.log(obj1.salary)
+			console.log(obj1.helloworld);
+			console.log(obj1.xx);
+
+			// ES6
+			var obj2 = {
+				name: 'Mike',
+				['product' + 1]: 'iPhone8'
+			}
+			console.log(obj2.product1);
+
+			var y = 'hello';
+			var obj3 = {
+				[y]: 'world' //  如果要解析变量，需要使用方括号
+			};
+			console.log(obj3.hello)
+
+			var obj4 = {
+				['hello']: 'hello world' // ok，如果属性名直接是一个字符串值，可以不适用方括号
+				//  当然，使用方括号也可以
+			}
+			console.log(obj4.hello)
+
+			let obj5 = {
+				['pro' + 'cess']() {
+					console.log('process')
+				}
+			};
+			obj5.process();
+
+			//  属性名表达式和简洁表示法不能同时使用，否则会报错
+			var name1 = 'kkk';
+			/* error
+			 * var obj6 = {
+			 	[name1]
+			 }*/
+			var obj6 = {
+				[name1]: 'xxx' // 属性名使用表达式，右侧必须指定属性值
+			}
+			console.log(obj6.kkk)
+
+			// ===（严格比较运算符）
+			console.log(Object.is('abc', 'abc'));
+			console.log(Object.is({}, {}));
+			/*
+			 * Object.is方法
+			 * 1. +0和-0不相等
+			 * 2. NaN等于自身
+			 * */
+			console.log(+0 === -0); // true
+			console.log(Object.is(+0, -0)); // false
+
+			console.log(NaN === NaN); // false
+			console.log(Object.is(NaN, NaN)); // true
+
+			//  复制对象属性
+			// assign参数有两个：targetObject、...rest参数（sourceObject）
+			var target = {
+				id: 10
+			};
+			var source1 = {
+				name: 'iPhone'
+			};
+			var source2 = {
+				price: 7000
+			};
+			var source3 = {
+				location: '中国'
+			};
+			Object.assign(target, source1, source2, source3);
+			console.log(target);
+
+			target = {
+				a: 1
+			};
+			source1 = {
+				a: 20
+			};
+			source2 = {
+				b: 30
+			};
+			source3 = {
+				b: 50
+			};
+			Object.assign(target, source1, source2, source3);
+			// Object.assign(target, source1, source3, source2);
+			console.log(target);
+
+			var target = {
+				a: {
+					b: 'c',
+					d: 'e'
+				}
+			};
+			var source = {
+				a: {
+					b: 'ok'
+				}
+			};
+			Object.assign(target, source);
+			console.log(target);
+
+			// assign只复制自身的属性，不可枚举的属性和继承的属性不会复制
+			//  不可枚举：enumerable = false
+			var target = {
+				a: 'a'
+			};
+			var source = Object.defineProperty({
+				b: 'b'
+			}, 'name', {
+				enumerable: false,
+				value: 'Bill'
+			});
+			console.log(target)
+			console.log(source)
+			Object.assign(target, source)
+			console.log(target)
+
+			// assign方法可以复制数组
+			var targetArray = [1, 2, 3];
+			var sourceArray = [4, 5];
+			Object.assign(targetArray, sourceArray)
+			console.log(targetArray); // [4,5,3]
+
+			//  为对象添加属性
+
+			//  方法一
+			class MyClass {
+				constructor(x, y) {
+					Object.assign(this, {
+						x,
+						y
+					})
+				}
+			}
+			var my = new MyClass(10, 20);
+			console.log('x', my.x);
+			console.log('y', my.y);
+			//  方法二
+			Object.assign(my, {
+				name: 'Bill'
+			});
+			console.log('name', my.name);
+			//  方法三
+			Object.assign(MyClass.prototype, {
+				price: 1200
+			});
+			console.log('price', my.price);
+
+			//  为对象添加方法
+
+			// 
+			Object.assign(MyClass.prototype, {
+				add(x, y) {
+					return x + y;
+				}
+			});
+			console.log('add', my.add(10, 40));
+
+			// 克隆对象
+			function cloneObject(origin) {
+				return Object.assign({}, origin);
+			}
+			var origin = {
+				id: 20,
+				name: 'Bill'
+			};
+			console.log('origin', cloneObject(origin));
+
+			// 合并多个对象
+			var target = {
+				a: 10
+			}
+			var source1 = {
+				b: 20
+			}
+			var source2 = {
+				c: 30
+			}
+			var source3 = {
+				d: 40
+			}
+			const merge = Object.assign(target, source1, source2, source3);
+			console.log(merge)
+
+			// 为属性指定默认值
+			const DEFAULTS = {
+				name: 'Mike',
+				price: 2000
+			}
+
+			function process(options) {
+				var obj = {}
+				Object.assign(obj, DEFAULTS, options)
+				return obj;
+			}
+			console.log(process({
+				a: 20,
+				price: 3000
+			}))
+		</script>
+	</body>
+</html>
