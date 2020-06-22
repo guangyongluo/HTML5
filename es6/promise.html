@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Promise对象</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			// Promise是一种异步实现模式，允许Promise中的任务在另一个线程中执行
+			//  Promise是一个构造函数，构造函数的参数可以传递一个回调函数，
+			//  回调函数就是在另一个线程中执行的任务
+			//  success和fail，Promise.then
+
+			function timeout(ms) {
+				return new Promise((success, fail) => {
+					setTimeout(success, ms);
+				})
+			}
+			timeout(2000).then(() => {
+				console.log('success');
+			})
+
+			function timeout1(ms) {
+				return new Promise((success, fail) => {
+					if (ms % 2 == 0) {
+						setTimeout(success, ms);
+					} else {
+						setTimeout(fail, ms);
+					}
+
+				})
+			}
+			timeout1(2000).then(() => {
+				console.log('success(2000)');
+			}, () => {
+				console.log('fail(2000)');
+			});
+			timeout1(1999).then(() => {
+				console.log('success(1999)');
+			}, () => {
+				console.log('fail(1999)');
+			});
+
+			//  异步下载HTML代码
+			var getHtml = function(url) {
+				var promise = new Promise((success, fail) => {
+					var client = new XMLHttpRequest();
+					client.open("GET", url);
+					client.onreadystatechange = handler;
+					client.responseType = 'text';
+					client.setRequestHeader('Accept', "text/html");
+					client.send();
+
+					function handler() {
+						if (this.readyState != 4) {
+							return;
+						}
+						if (this.status == 200) {
+							success(this.response);
+						} else {
+							fail(new Error(this.statusText));
+						}
+					}
+				})
+				return promise;
+			}
+
+			getHtml("basic.html").then((html) => {
+				console.log(html);
+			}, (error) => {
+				console.error(error);
+			});
+
+			getHtml("basic.html").then((html) => {
+				console.log(html);
+				return html.length;
+			}).then((length) => {
+				console.log("html长度:" + length);
+			});
+
+
+			getHtml("basic.html").then((html) => {
+				console.log(html);
+				return getHtml("then.html");
+			}).then((html) => {
+				console.log(html);
+			}).catch((errorMsg) => {
+				console.log(errorMsg);
+			});
+			
+			
+			// Generator函数分段执行的，就是通过yield实现的
+        // 可以在Generator函数中将大人物分解成多步，其中某些步骤
+        //  就可以交给Promise对象异步执行，这是Generator函数是暂停执行的
+        //  直到Promise对象执行完异步人物后，才会返回Generator函数。
+        //  核心问题：Generator函数与Promise对象之间的数据交互
+        
+        //  主要的方式：Generator函数通过next方法返回一个Promise对象，然后
+        // Promise对象执行完异步任务后，将处理完的数据返回给Generator函数继续处理
+        
+        // demo：按txt方式下载一个json文档，然后通过Promise对象异步将该文档
+        //  转换为json对象，再将json对象返回给Generator函数，最后在Generator
+        //  函数中输出对象的所有属性值
+        
+        var getJSON = function(url)
+        {
+        	    var promise = new Promise((success,fail)=>{
+        	    	    var client = new XMLHttpRequest();
+        	    	    client.open("GET",url);
+        	    	    client.onreadystatechange = handler;
+        	    	    client.responseType = 'text';
+        	    	    client.send();
+        	    	    function handler()
+        	    	    {
+        	    	    	    if(this.readyState != 4)
+        	    	    	    {
+        	    	    	    	    return;
+        	    	    	    }
+        	    	    	    if(this.status == 200)
+        	    	    	    {
+        	    	    	    	    success(this.response);
+        	    	    	    }
+        	    	    	    else
+        	    	    	    {
+        	    	    	    	    fail(new Error(this.statusText));
+        	    	    	    }
+        	    	    }
+        	    	
+        	    })
+        	    return promise;
+        }
+        function* gen()
+        {
+        	    var url = "data.json";
+        	    var result = yield getJSON(url);
+        	    console.log("name:" + result.name);
+        	    console.log("age:" + result.age);
+        	    console.log("salary:" + result.salary);
+        }
+        var g = gen();
+        //  Generator函数 -> Promise对象
+        var obj = g.next();
+        //  通过Promise对象将json文本转换为json对象
+        obj.value.then((json)=>{
+        	    var jsonObj = JSON.parse(json);
+        	    return jsonObj;
+        }).then((jsonObj)=>{
+        	    //  将解析完的JSON对象传回gen函数（Promise对象 -> Generator函数传递数据的过程）
+        	    g.next(jsonObj)
+        })
+		</script>
+	</body>
+</html>
