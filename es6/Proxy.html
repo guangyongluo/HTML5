@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>拦截对象操作的Proxy(代理)</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			// Proxy：用于拦截对象的操作
+			// ES6 原生支持Proxy
+			var obj1 = {
+				name: 'Bill',
+				process: function() {
+					console.log('process Bill')
+				}
+			};
+			var obj2 = {
+				name: 'Mike',
+				process: function() {
+					console.log('process Mike');
+				}
+			};
+			console.log(obj1.name);
+			obj1.process();
+			console.log(obj2.name);
+			obj2.process();
+
+			// 1. 如何使用Proxy
+			// 2. 可以用Proxy拦截对象的哪些操作
+
+			//var obj = new Proxy(target, handler);
+			//  target：要拦截的对象
+			//  handler：拦截的动作
+
+			var obj = new Proxy(obj1, {
+				get: function(target, key, receiver) {
+					console.log('-----------------');
+					return Reflect.get(target, key, receiver);
+				}
+			});
+			// console.log(obj.name);
+			//obj.process();
+
+			//  用代理拦截多个对象
+			//  单独将handler提出来
+			var handler = {
+				get: function(target, key, receiver) {
+					console.log('-----------------');
+					return Reflect.get(target, key, receiver);
+				}
+			}
+			var proxyObj1 = new Proxy(obj1, handler);
+			var proxyObj2 = new Proxy(obj2, handler);
+			console.log(proxyObj1.name);
+			proxyObj1.process();
+			console.log(proxyObj2.name);
+			proxyObj2.process();
+
+
+			//  1. 如何使用get代理拦截属性的读取操作
+			//  2. get代理的继承
+			//  3. 应用：利用get代理读取数组的负索引
+
+			//  1. 如何使用get代理拦截属性的读取操作
+			var product = {
+				name: 'iPhone'
+			};
+
+
+			var proxy = new Proxy(product, {
+				get: function(target, property) {
+					if (property in target) {
+						return target[property];
+					} else {
+						throw new ReferenceError("属性 \"" + property + "\"不存在！");
+					}
+				}
+			});
+			console.log(proxy.name);
+			//  console.log(proxy.price);
+			//  2. get代理的继承
+			let proto = new Proxy({}, {
+				get(target, propertyKey, receiver) {
+					console.log('GET ' + propertyKey);
+					return target[propertyKey];
+				}
+			});
+			let obj = Object.create(proto);
+			obj.name;
+
+			//  3. 应用：利用get代理读取数组的负索引
+			var arr1 = [1, 2, 3];
+			//console.log(arr1[-1]);
+			//  arr1[0] = arr1[-3]   arr1[2] = arr1[-1]
+
+			function createSuperArray(...elements) {
+				let handler = {
+					get(target, key, receiver) {
+						let index = Number(key);
+						if (index < 0) {
+							key = String(target.length + index)
+						}
+						return Reflect.get(target, key, receiver);
+					}
+				}
+				let target = [];
+				target.push(...elements);
+				return new Proxy(target, handler);
+			};
+
+			let arr2 = createSuperArray(1, 2, 3);
+			console.log(arr1[1]);
+			console.log(arr1[-1]);
+			console.log(arr2[1]);
+			console.log(arr2[-1]);
+			console.log(arr2[-2]);
+			console.log(arr2[-3]);
+
+			//  1.  校验属性值
+			//  2.  控制属性是否可访问
+
+			//  1.  校验属性值
+			var product = {
+				name: '特斯拉汽车',
+				price: 80 // 30-180        	
+			};
+
+			let validator = {
+				set: function(obj, key, value) {
+					// 首先判断属性名
+					if (key == 'price') {
+						if (!Number.isInteger(value)) {
+							throw new TypeError('价格必须是整数');
+						}
+						if (value < 30 || value > 180) {
+							throw new RangeError('价格必须在30到180之间');
+						}
+					}
+					obj[key] = value;
+				}
+			};
+			let product1 = new Proxy(product, validator);
+			//  product1.price = 200;
+			product1.price = 170;
+			console.log(product1.price);
+			// product1.price = 'abc';
+			//  2.  控制属性是否可访问
+
+			//  对象的内部属性 属性名以下划线（_）开头
+			var handler = {
+				get(target, key) {
+					invariant(key, 'get');
+					return target[key];
+				},
+				set(target, key, value) {
+					invariant(key, 'set');
+					return true;
+				}
+			};
+
+			function invariant(key, type) {
+				if (key[0] == "_") {
+					throw new Error(`内部属性不能被访问 ${type}`);
+				}
+
+			};
+			var obj = {
+				name: 'Bill',
+				_value: 20
+
+			};
+			var objProxy = new Proxy(obj, handler);
+			console.log(objProxy.name);
+			// console.log(objProxy._value);
+			objProxy.name = "Mike";
+			// objProxy._value = 40;
+
+
+			// demo1
+			var fun1 = function() {
+				return '世界您好!';
+			}
+			var handler = {
+				apply: function() {
+					return 'hello world';
+				}
+			};
+			console.log(fun1());
+			var funProxy = new Proxy(fun1, handler);
+			console.log(funProxy());
+
+			// demo2
+			function sum(num1, num2) {
+				return num1 + num2;
+			}
+			console.log(sum(20, 40));
+
+			var twice = {
+				apply(target, ctx, args) {
+					return Reflect.apply(...arguments) * 2;
+				}
+			};
+			var sumProxy = new Proxy(sum, twice);
+			console.log(sumProxy(20, 40));
+			console.log(sumProxy.call(null, 20, 40));
+			console.log(sumProxy.apply(null, [30, 50]));
+
+			// in 
+			var handler = {
+				has(target, key) {
+					//console.log("<" + key + ">");
+					if (key[0] == '_') {
+						return false;
+					}
+					return key in target;
+				}
+			};
+
+			var obj = {
+				name: 'iPhone7',
+				price: 5800,
+				_value: 200
+			};
+			var objProxy = new Proxy(obj, handler);
+			console.log('_value' in obj); // true
+
+			console.log('_value' in objProxy); // false
+
+			console.log('price' in obj); // true
+
+			console.log('price' in objProxy); // true
+			//  has方法并不会影响for in操作
+			for (key in objProxy) {
+				console.log(key)
+			}
+
+			// 如果原对象不可配置或禁止扩展，那么这时has拦截会报错
+			var obj1 = {
+				a: 20
+			};
+			Object.preventExtensions(obj1);
+			var proxy = new Proxy(obj1, {
+				has: function(target, key) {
+					return false;
+				}
+			});
+			//  'a' in proxy
+
+
+			var handler = {
+				construct(target, args) {
+					console.log('construct');
+					return new target(...args);
+				}
+			};
+			var proxy = new Proxy(function() {}, handler);
+
+			new proxy();
+			var handler1 = {
+				construct(target, args) {
+					console.log('construct');
+					return 20;
+				}
+			};
+			var proxy1 = new Proxy(function() {}, handler1);
+			//new proxy1();
+
+			var handler2 = {
+				construct(target, args) {
+					console.log('construct');
+					return {
+						name: 'Bill'
+					};
+				}
+			};
+			var proxy2 = new Proxy(function() {}, handler2);
+			console.log(new proxy2().name);
+
+			var handler = {
+				deleteProperty(target, key) {
+					delete target[key]; //  需要在该方法中再次删除对象属性
+					console.log('删除了' + key + "属性");
+					return true;
+				}
+			};
+			var obj = {
+				name: 'Bill',
+				age: 40
+			};
+			var objProxy = new Proxy(obj, handler);
+			console.log(objProxy.age);
+			delete objProxy.age;
+			console.log(objProxy.age);
+
+
+			var obj = {};
+			var handler = {
+				defineProperty(target, key, descriptor) {
+					console.log("<" + key + ">")
+					//  要想让被拦截的操作仍然发挥原来的作用，需要调用
+					// Reflect.method
+					return Reflect.defineProperty(target, key, descriptor);
+				}
+			}
+			var proxy = new Proxy(obj, handler);
+			proxy.name = "Bill";
+			console.log('name' in proxy);
+
+
+			// Reflect：将Object对象的一些明显属于语言层面的方法放到Reflect中
+			// Object和Reflect的方法是一样的，以后再部署语言层面的方法
+			// 会只部署在Reflect中
+
+			/*
+			 * defineProperty、deleteProperty、has
+			 */
+		</script>
+	</body>
+</html>
