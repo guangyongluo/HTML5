@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Symbol类型</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			// Symbol：为了解决对象属性冲突的问题
+			// 正在使用一个对象，动态添加一个属性
+			// Symbol：数据类型
+			// JavaScript的第7种数据类型，前六种数据类型：Undefined
+			// Null、布尔、字符串、数值和对象
+
+			//let s = Symbol(); // s就是独一无二的
+			let s = Symbol("s"); // s就是独一无二的
+			console.log(typeof s);
+			let ss = Symbol("ss");
+			console.log(typeof ss);
+			console.log(s);
+			console.log(ss);
+
+			let a = Symbol();
+			let b = Symbol();
+			if (a === b) {
+				console.log("a === b");
+			} else {
+				console.log("a != b");
+			}
+			let aa = Symbol("x");
+			let bb = Symbol("x");
+			if (aa === bb) {
+				console.log("aa === bb");
+			} else {
+				console.log("aa != bb");
+			}
+
+			// Symbol不能与其他类型的值进行运算，否则会报错
+			var sym = Symbol('Test Symbol');
+			//var sss = "hello" + sym;  //  不能隐式转换到字符串
+
+			//  Symbol可以显式转换为String
+			var str = String(sym); //  方法1
+			console.log(str)
+			console.log(sym.toString()); //  方法2
+
+			//  Symbol可以转为布尔值，但不能转为数值
+			var sym1 = Symbol("abc");
+			console.log(Boolean(sym)); //  true
+
+
+			var id = Symbol();
+			var name1 = Symbol();
+			var obj1 = {};
+			//  方法1
+			obj1[id] = 200;
+			obj1[name1] = 'Mike';
+
+			// 方法2
+			var obj2 = {
+				[id]: 300 //  如果不加方括号，name属性名的类型就是String
+				//  而不是Symbol        	   
+			};
+
+			// 方法3
+			var obj3 = {};
+			Object.defineProperty(obj3, name1, {
+				value: 'John'
+			});
+
+			console.log('obj1 id', obj1[id]);
+			// obj1['id'] = 1000;
+			// Symbol不能使用点（.）运算符
+			console.log('obj1.id', obj1.id); // undefined
+
+			// 在对象内部也需要使用方括号定义属性
+			let sym = Symbol();
+			let obj = {
+				//  Symbol属性必须加方括号，否则就变成了字符串属性了
+				[sym]: function() {
+					console.log('hello world')
+				}
+			};
+			obj[sym]();
+			//  Symbol一个重要的应用，就是定义常量
+			let CONST = {
+				DEBUG: Symbol('debug'),
+				INFO: Symbol('info'),
+				WARNING: Symbol('warning')
+			};
+			console.log(CONST.INFO.toString());
+
+			const COLOR_WHITE = Symbol('white');
+			const COLOR_RED = Symbol('red')
+
+
+			//  for...in   Object.keys(),Object.getOwnPropertyNames()
+			// Object.getOwnPropertySymbols
+			var obj = {
+				name: 'Bill'
+			};
+			var a = Symbol('a');
+			var b = Symbol('b');
+			obj[a] = 'Hello';
+			obj[b] = 'World';
+			var objectSymbols = Object.getOwnPropertySymbols(obj);
+			console.log(objectSymbols);
+
+			for (var key in obj) {
+				console.log(key);
+			}
+
+			// 同时获取Symbol和非Symbol属性
+			// Reflect.ownKeys
+			console.log(Reflect.ownKeys(obj));
+
+			//  可以利用Symbol的特性为对象添加一些非私有的，但又希望
+			//  只用于内部的方法或属性
+			var size = Symbol('size');
+			class Collection {
+				constructor() {
+					this[size] = 0; //  为对象添加一个Symbol类型的名为size的属性，初始值为0
+				}
+				add(item) {
+					this[this[size]] = item;
+					this[size]++;
+				}
+				static sizeOf(instance) {
+					return instance[size];
+				}
+			}
+			var cc = new Collection();
+			console.log(Collection.sizeOf(cc));
+
+			cc.add('ok');
+			cc.add("xyz");
+			console.log(Collection.sizeOf(cc));
+			console.log(Object.keys(cc));
+
+			console.log(Object.getOwnPropertySymbols(cc));
+
+
+			var name1 = Symbol("name")
+			var name2 = Symbol("name")
+			console.log("name1 === name2", name1 === name2);
+
+			//  Symbol.for首先会向全局环境注册名为key的Symbol变量
+			//  第一次调用for方法，会返回一个新的Symbol变量，如果以后再
+			//  调用for方法，并且for方法的参数值（key）在全局环境中存在
+			//  那么for方法会返回这个已经注册的Symbol变量
+			var id1 = Symbol.for("id")
+			var id2 = Symbol.for("id")
+			console.log("id1 === id2", id1 === id2);
+
+			// keyFor：返回某个已经注册的Symbol变量的key
+			console.log(Symbol.keyFor(id1));
+			console.log(Symbol.keyFor(name1));
+			console.log(Symbol.keyFor(id2));
+		</script>
+	</body>
+</html>
