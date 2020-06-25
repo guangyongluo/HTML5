@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>async函数</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			// Generator函数分段执行的，就是通过yield实现的
+			// 可以在Generator函数中将大任务分解成多步，其中某些步骤
+			//  就可以交给Promise对象异步执行，这是Generator函数是暂停执行的
+			//  直到Promise对象执行完异步任务后，才会返回Generator函数。
+			//  核心问题：Generator函数与Promise对象之间的数据交互
+
+			//  主要的方式：Generator函数通过next方法返回一个Promise对象，然后
+			// Promise对象执行完异步任务后，将处理完的数据返回给Generator函数继续处理
+
+			// demo：按txt方式下载一个json文档，然后通过Promise对象异步将该文档
+			//  转换为json对象，再将json对象返回给Generator函数，最后在Generator
+			//  函数中输出对象的所有属性值
+
+			var getJSON = function(url) {
+				var promise = new Promise((success, fail) => {
+					var client = new XMLHttpRequest();
+					client.open("GET", url);
+					client.onreadystatechange = handler;
+					client.responseType = 'text';
+					client.send();
+
+					function handler() {
+						if (this.readyState != 4) {
+							return;
+						}
+						if (this.status == 200) {
+							success(this.response);
+						} else {
+							fail(new Error(this.statusText));
+						}
+					}
+
+				})
+				return promise;
+			}
+
+			function* gen() {
+				var url = "data.json";
+				var result = yield getJSON(url);
+				console.log("name:" + result.name);
+				console.log("age:" + result.age);
+				console.log("salary:" + result.salary);
+			}
+			var g = gen();
+			//  Generator函数 -> Promise对象
+			var obj = g.next();
+			//  通过Promise对象将json文本转换为json对象
+			obj.value.then((json) => {
+				var jsonObj = JSON.parse(json);
+				return jsonObj;
+			}).then((jsonObj) => {
+				//  将解析完的JSON对象传回gen函数（Promise对象 -> Generator函数传递数据的过程）
+				g.next(jsonObj)
+			});
+
+			// async：ES7
+			function timeout(ms) {
+				return new Promise((success, fail) => {
+					if (ms % 2 == 0) {
+						setTimeout(success, ms);
+					} else {
+						//  必须调用fail，async函数和catch方法才会捕获异常
+						fail(new Error("毫秒必须是偶数"));
+					}
+
+				})
+			}
+			timeout(2000).then(() => {
+				console.log('hello world 2000')
+			})
+			timeout(1999).catch((error) => {
+				console.log(error);
+			})
+			//  使用async函数
+			async function asyncPrint(value, ms) {
+				try {
+					//  await等待success方法被调用，调用后，立刻往下执行
+					await timeout(ms);
+					console.log(value);
+				} catch (e) {
+					console.log(e);
+				}
+			}
+			asyncPrint('hello world 3000', 3000);
+			asyncPrint('hello world 3000', 3001);
+			
+			var users = [
+							{name:'tom', age:24, email:'tom@email.com'},
+							{name:'jack', age:23, email:'jack@email.com'},
+							{name:'tom', age:24, email:'tom@email.com'}
+						];
+						
+			var indexes = [0,1];
+			
+			indexes.map(value => users.splice(value, 1));
+			
+			console.log(users);
+		</script>
+	</body>
+</html>
