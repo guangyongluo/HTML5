@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>js类class</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//  1. 在ES6中如何定义类
+			//  2. 枚举类中的属性
+			//  3. 类的构造方法
+			//  4. 类中的name属性
+
+			//  1. 在ES6中如何定义类
+
+			//  在ES5中如何定义类
+			function Product(name, price) {
+				this.name = name;
+				this.price = price;
+			}
+			Product.prototype.toString = function() {
+				return 'name:' + this.name + ', price:' + this.price;
+			}
+
+			var product = new Product('iPhone8 Plus', 7000);
+			product.printName = function() {
+				console.log('商品名：' + this.name);
+			}
+			console.log(product.toString());
+			product.printName();
+
+			//  ES6中定义类的新方式
+			class NewProduct {
+				constructor(name, price) {
+					this.name = name;
+					this.price = price;
+				}
+				toString() {
+					return 'name:' + this.name + ', price:' + this.price;
+				}
+				printName() {
+					console.log('商品名：' + this.name);
+				}
+			}
+			var newProduct = new NewProduct('特斯拉电动车', 900000);
+			console.log(newProduct.toString());
+			newProduct.printName();
+
+			//  新的定义类的方式就是一个语法糖
+			console.log(typeof NewProduct); // function
+
+			// 枚举类的属性
+			console.log(Object.keys(NewProduct.prototype)); // []
+			console.log(Object.getOwnPropertyNames(NewProduct.prototype)); // ["constructor", "toString", "printName"]
+			console.log(Object.keys(newProduct)); // ["name", "price"]
+			console.log(Object.getOwnPropertyNames(newProduct)); // ["name", "price"]
+
+			console.log(Object.keys(Product.prototype)); // ["toString"]
+			console.log(Object.keys(product)); // ["name", "price", "printName"]
+
+			// 构造方法（constructor）
+			// 类必须要有构造方法，如果未指定构造方法，系统会自动加一个没有参数的构造方法
+			// 使用new命令创建对象时需要调用类中的构造方法
+			//  constructor默认会返回当期类的实例对象，但也可以通过return返回其他的对象
+			//  
+			class MyClass {
+				constructor() {
+					return new NewProduct('会员卡', 200);
+				}
+			}
+			var p = new MyClass();
+			console.log(p.toString());
+			p.printName();
+			console.log(typeof p);
+			console.log(p instanceof NewProduct)
+
+			// name属性
+			class MyClass1 {
+
+			}
+			var my = new MyClass1();
+			console.log(MyClass.name);
+			//   console.log(my.name);   // undefined
+
+
+			var myFun = function() {
+				console.log("myFun");
+			}
+			myFun();
+
+			var myFun1 = function hello() {
+				console.log(hello.name)
+				console.log(typeof hello);
+				console.log(typeof myFun1);
+				console.log(myFun1.name);
+			}
+			myFun1();
+			console.log(myFun1.name);
+			// hello();  error，只在myFun1函数内部可以使用
+
+			var MyClass = class Me {
+				getClassName() {
+					console.log(Object.getOwnPropertyNames(MyClass));
+					console.log(Object.getOwnPropertyNames(Me));
+					return Me.name;
+				}
+			}
+			var c = new MyClass();
+			console.log(c.getClassName());
+			console.log(MyClass.name);
+
+			var Person = class {
+				constructor(name) {
+					this.name = name;
+				}
+				printName() {
+					console.log('姓名：' + this.name);
+				}
+			}
+			new Person('Bill').printName();
+
+
+			// extends
+			class Person {
+				constructor(name, age) {
+					this.name = name;
+					this.age = age;
+				}
+				toString() {
+					return 'name:' + this.name + ' age:' + this.age;
+				}
+			}
+			class Teacher extends Person {
+				constructor(name, age, course) {
+					super(name, age);
+					this.course = course;
+				}
+				toString() {
+					return super.toString() + ' course:' + this.course;
+				}
+			}
+			var teacher = new Teacher('Bill', 30, '大数据');
+			console.log(teacher.toString());
+
+			//  在子类的构造方法中必须调用super，否则创建类实例时会抛出异常
+			//  因为子类中没有this，所以要通过执行super方法来获得this对象
+			class Teacher1 extends Person {
+				constructor(name, age, course) {
+					super(name, age);
+					//this.course = course;
+				}
+				toString() {
+					return super.toString() + ' course:' + this.course;
+				}
+			}
+			var teacher1 = new Teacher1('Bill', 30, '大数据');
+			//  super的位置可以随便放，只有调用super后，才能使用this
+			//  
+			class Teacher2 extends Person {
+				constructor(name, age, course) {
+					console.log('constructor');
+					super(name, age);
+					this.course = course;
+				}
+				toString() {
+					return super.toString() + ' course:' + this.course;
+				}
+			}
+			var teacher2 = new Teacher2('Bill', 30, '大数据');
+
+
+			/*
+			           Boolean()
+			           Number()
+			           String()
+			           Array()
+			           Date()
+			           Function()
+			           RegExp()
+			           Error()
+			           Object()
+			         */
+			// ES5 不能继承原生构造函数
+			function MyArray() {
+				Array.apply(this, arguments);
+			}
+			MyArray.prototype = Object.create(Array.prototype, {
+				constructor: {
+					value: MyArray,
+					writable: true,
+					configurable: true,
+					enumerable: true
+				}
+			});
+			var persons = new MyArray(1, 2);
+			persons[2] = 'Bill';
+			persons[3] = 'Mike';
+			console.log(persons.length); // 0
+
+			var persons1 = new Array(1, 2);
+			persons1[2] = 'Bill';
+			persons1[3] = 'Mike';
+			console.log(persons1.length); // 4
+
+			//  ES6可以继承原生构造函数
+			class NewArray extends Array {
+				constructor(...args) {
+					super(...args);
+				}
+			}
+			var arr = new NewArray(1, 2);
+			arr[2] = 'Bill';
+			arr[3] = 'Mike';
+			console.log(arr.length); // 4
+
+			arr.length = 0;
+			console.log(arr[0]); // undefined
+
+			// Demo:SumArray
+			//  功能：通过sum方法计算数组中所有数值类型元素的和
+			class SumArray extends Array {
+				constructor(...args) {
+					super(...args);
+				}
+				sum() {
+					var n = 0;
+					for (let i = 0; i < this.length; i++) {
+						if (typeof this[i] == 'number') {
+							n += this[i];
+						}
+					}
+					return n;
+				}
+			}
+			var sumArray = new SumArray(1, 2, 'abc', true, 3, 'hello', 4);
+			console.log(sumArray.sum());
+
+
+			// getter和setter方法就是可以监控对象属性读写的方法
+			// obj.name
+
+			class Person {
+				constructor() {
+					this._name = '';
+				}
+				get name() {
+					console.log('get name()');
+					return '<' + this._name + '>';
+				}
+				set name(value) {
+					console.log('set name(value)');
+					this._name = value;
+				}
+			}
+			var person = new Person();
+			person.name = 'Bill';
+			console.log(person.name);
+
+
+			// 利用Generator方法可以遍历对象中的数据
+
+			class MyClass {
+				constructor(...args) {
+					this.args = args;
+				}
+				//  给类添加一个默认的遍历器
+				*[Symbol.iterator]() {
+					for (let arg of this.args) {
+						yield arg;
+					}
+				}
+				* gen() {
+					for (let arg of this.args) {
+						yield arg;
+					}
+				}
+			}
+			var my = new MyClass(1, 2, 3, 4, 5);
+			var obj = my.gen();
+			console.log(obj.next());
+			console.log(obj.next());
+			console.log(my[Symbol.iterator]().next());
+			//  x == arg
+			for (let x of new MyClass('a', 'b', 'c')) {
+				console.log(x);
+			}
+
+			// 成员方法：必须通过类的实例调用，静态方法：必须通过类本身调用
+			// 不能通过类实例调用，这一点和Java不同
+			//  成员方法会被基础，而静态方法不会被继承
+
+			class MyClass {
+				// 会被继承
+				process() {
+					console.log('process');
+				}
+				static delete() {
+					console.log('delete');
+				}
+			}
+			new MyClass().process();
+			//  new MyClass().delete();  抛出异常
+			MyClass.delete();
+			console.log('-----------------');
+			//  静态方法可以从super对象调用
+			class SubClass extends MyClass {
+				static method() {
+					console.log('method');
+					super.delete();
+				}
+			}
+			SubClass.method();
+
+			//  静态属性
+			class NewClass {
+
+			}
+			NewClass.name = 'Bill';
+			NewClass.name1 = 'Mike';
+			NewClass.age = 30;
+			console.log(NewClass.name); // NewClass，而不是Bill
+			console.log(NewClass.name1);
+			console.log(NewClass.age);
+
+
+			//  写法1
+			function Person1(name) {
+				// 通过new命令创建对象
+				if (new.target != undefined) {
+					this.name = name;
+				} else {
+					throw new Error('必须使用new实例化类');
+				}
+			}
+			// 写法2
+			function Person2(name) {
+				if (new.target === Person2) {
+					this.name = name;
+				} else {
+					throw new Error('必须使用new实例化类');
+				}
+			}
+			var person1 = new Person1('李宁');
+			//  var person11 = Person1.call(person1, 'Bill');
+
+			//  new.target在类中返回当前的Class
+			class MyClass {
+				constructor(name) {
+					// console.log(new.target);
+					// console.log(new.target === MyClass);
+					this.name = name;
+				}
+			}
+			new MyClass('John');
+
+			// 子类继承父类，new.target返回的是子类
+			class SubClass extends MyClass {
+				constructor(name) {
+					super(name);
+					console.log(new.target);
+					console.log(new.target === MyClass); // false
+					console.log(new.target === SubClass); // true
+				}
+			}
+			new SubClass('李宁');
+
+			// 可以利用new.target的特性模拟实现抽象类        
+			// 抽象类有两个特征：
+			//  1. 抽象类不能独立创建实例，必须通过子类继承才能实例化
+			//  2. 抽象类的抽象方法不能直接调用，必须在子类中覆盖后（override）才能调用
+
+			class AbstractPerson {
+				constructor() {
+					if (new.target === AbstractPerson) {
+						throw new Error('抽象类不能实例化');
+					}
+				}
+				// 抽象方法
+				print() {
+					// 内部抛出异常
+					throw new Error('抽象方法不能直接调用.')
+				}
+				//  普通方法
+				method() {
+					console.log('method:普通方法');
+				}
+			}
+			class Teacher extends AbstractPerson {
+				constructor() {
+					super();
+				}
+				//  override父类的抽象方法
+				print() {
+					console.log('Teacher.method');
+				}
+			}
+			class Engineer extends AbstractPerson {
+				constructor() {
+					super();
+				}
+			}
+
+			new Teacher().print();
+			// new Engineer().print(); // error，调用了抽象类的print方法
+			// new AbstractPerson();
+			new Teacher().method(); // 调用普通方法
+		</script>
+	</body>
+</html>
